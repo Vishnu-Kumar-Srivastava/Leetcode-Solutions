@@ -1,0 +1,46 @@
+138: CopyListWithRandomPointer
+**Intuition
+The code is used to create a deep copy of a linked list with a random pointer. In other words, it creates a new copy of the linked list that has the same values and structure as the original linked list, but with new memory locations for each node, including the random pointers.
+
+Approach
+The code uses an unordered map to keep track of the old node and the new node. The first while loop goes through each node of the original linked list and creates a new node in the new linked list with the same value as the old node, and adds the pair (old node, new node) to the unordered map. The second while loop goes through each node of the original linked list and sets the next and random pointers of the new node to the corresponding new nodes in the unordered map.
+
+Complexity
+Time complexity:
+The time complexity of this code is O(n), where n is the number of nodes in the linked list. This is because the code goes through each node in the linked list twice, once for creating the new nodes, and once for setting the next and random pointers.
+
+Space complexity:
+Space complexity: The space complexity of this code is O(n), where n is the number of nodes in the linked list. This is because the unordered map stores the pairs of (old node, new node) for each node in the linked list.
+
+Code
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        // Create an unordered map to store the pairs (old node, new node)
+        unordered_map<Node*,Node*> umap;
+        // Create a new pointer to the head of the linked list
+        Node* h = head;
+        // Loop through each node of the linked list
+        while(h)
+        {
+            // Create a new node with the same value as the old node
+            umap[h] = new Node(h->val);
+            // Move to the next node in the linked list
+            h = h->next;
+        }
+        // Reset the pointer to the head of the linked list
+        h = head;
+        // Loop through each node of the linked list
+        while(h)
+        {
+            // Get the corresponding new node from the unordered map
+            Node* newnode = umap[h];
+            // Set the next pointer of the new node to the corresponding new node in the unordered map
+            newnode->next = umap[h->next];
+            // Set the random pointer of the new node to the corresponding new node in the unordered map
+            newnode->random = umap[h->random];
+            // Move to the next node in the linked list
+            h = h->next;
+        }
+        // Return the new head of the linked list
+        return umap[head];
